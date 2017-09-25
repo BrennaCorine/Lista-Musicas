@@ -6,10 +6,10 @@ import java.util.Scanner;
 public class ListaMusicas {
 
     public static void main(String[] args) {
-        Musica inicio = new Musica();
-        Musica termino = new Musica();
         Musica novo = new Musica();
         Musica atual = new Musica();
+        Musica inicio = new Musica();
+        Musica termino = new Musica();
 
         int opcao;
         do {
@@ -21,75 +21,87 @@ public class ListaMusicas {
             System.out.println("5 - Remover o primeiro objeto da lista");
             System.out.println("6 - Remover o último objeto da lista");
             System.out.println("7 - Mostrar todos os objetos da lista na ordem do primeiro para o último");
-            System.out.println("8 - Mostrar todos os objetos da lista na ordem do último para o primeiro");
-            System.out.println("9 - Sair");
+            System.out.println("8 - Sair");
             opcao = pedeOpcao();
             switch (opcao) {
                 case 1:
                     novo.nome = pedeMusica();
                     // se a lista não existe adiciona o "novo" como primeiro da lista (e como fim)
-                    if (inicio == null) {
-                        novo.proximo = null;
-                        inicio = novo;
+                    novo.proximo = inicio;
+                    inicio = novo;
+                    if (termino == null) {
                         termino = novo;
                         // se a lista existe e o novo será o primeiro, o próximo deste será o resto da lista (inicio)   
-                    } else {
-                        novo.proximo = inicio;
+                    }
+                    System.out.println(inicio.nome);
+                    break;
+
+                case 2:
+                    novo.nome = pedeMusica();
+                    novo.proximo = null;
+                    termino.proximo = novo;
+
+                    termino = novo;
+                    if (inicio == null) {
                         inicio = novo;
                     }
 
-                    break;
-                case 2:
-                    novo.nome = pedeMusica();
-                    if (inicio == null) {
-                        novo.proximo = null;
-                        inicio = novo;
-                        termino = novo;
-                    } else {
-                        termino.proximo = novo;
-                        termino = novo;
-                    }
+                    System.out.println(termino.nome);
                     break;
 
                 case 3:
-                    String busca = pedeMusica();
+                    novo.nome = pedeMusica();
                     atual = inicio;
-                    boolean achou = false;
-                    do {
-
-                        if (atual.nome.equals(busca)) {
+                    boolean achado = false;
+                    while (atual != null) {
+                        if (atual.nome.equals(novo.nome)) {
                             System.out.println("Musica: " + atual.nome);
-                            achou = true;
+                            achado = true;
                             break;
-
+                        }
+                        if (atual == termino) {
+                            atual = termino;
                         }
                         atual = atual.proximo;
+                    }
+                    if (!achado) {
+                        System.out.println("Essa musica não foi encontrada!");
+                    }
+                    break;
 
-                    } while (atual != null);
-                    
-                    if (!achou){
-                        System.out.println("Não foi encontada uma música correspondente!");
+                case 4:
+                    novo.nome = pedeMusica();
+                    achado = false;
+                    atual = inicio;
+                    if (novo.nome.equals(inicio.nome)) {
+                        inicio = inicio.proximo;
+                        if (inicio == null) {
+                            termino = null;
+                        }
+                    } else {
+                        while (true) {
+                            if (atual.proximo.nome.equals(novo.nome)) {
+
+                            }
+                        }
                     }
 
                     break;
-                case 4:
 
-                    break;
                 case 5:
 
                     break;
+
                 case 6:
 
                     break;
-                case 7:
 
-                    break;
-                case 8:
+                case 7:
 
                     break;
             }
 
-        } while (opcao != 9);
+        } while (opcao != 8);
 
     }
 
