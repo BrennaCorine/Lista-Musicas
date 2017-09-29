@@ -5,11 +5,13 @@ import java.util.Scanner;
 
 public class ListaMusicas {
 
+    static Musica novo = new Musica();
+    static Musica atual = new Musica();
+    static Musica inicio = new Musica();
+    static Musica termino = new Musica();
+    
     public static void main(String[] args) {
-        Musica novo = new Musica();
-        Musica atual = new Musica();
-        Musica inicio = new Musica();
-        Musica termino = new Musica();
+        
 
         int opcao;
         do {
@@ -33,7 +35,7 @@ public class ListaMusicas {
                         termino = novo;
                         // se a lista existe e o novo será o primeiro, o próximo deste será o resto da lista (inicio)   
                     }
-                    System.out.println(inicio.nome);
+                    System.out.println("Musica adicionada com sucesso: " + inicio.nome);
                     break;
 
                 case 2:
@@ -46,26 +48,31 @@ public class ListaMusicas {
                         inicio = novo;
                     }
 
-                    System.out.println(termino.nome);
+                    System.out.println("Musica adicionada com sucesso: " + termino.nome);
                     break;
 
                 case 3:
                     novo.nome = pedeMusica();
                     atual = inicio;
                     boolean achado = false;
-                    while (atual != null) {
-                        if (atual.nome.equals(novo.nome)) {
-                            System.out.println("Musica: " + atual.nome);
-                            achado = true;
-                            break;
+                    if (inicio == null) {
+                        System.out.println("a lista está vazia!");
+                    } else {
+                        while (atual != null) {
+                            if (atual.nome.equals(novo.nome)) {
+                                System.out.println("Musica encontrada!");
+                                System.out.println("Musica: " + atual.nome);
+                                achado = true;
+                                break;
+                            }
+                            if (atual == termino) {
+                                atual = termino;
+                            }
+                            atual = atual.proximo;
                         }
-                        if (atual == termino) {
-                            atual = termino;
+                        if (!achado) {
+                            System.out.println("Essa musica não foi encontrada!");
                         }
-                        atual = atual.proximo;
-                    }
-                    if (!achado) {
-                        System.out.println("Essa musica não foi encontrada!");
                     }
                     break;
 
@@ -73,22 +80,50 @@ public class ListaMusicas {
                     novo.nome = pedeMusica();
                     achado = false;
                     atual = inicio;
-                    if (novo.nome.equals(inicio.nome)) {
+                    if (inicio == null) {
+                        System.out.println("A lista está vazia!");
+                    } else {
+                        if (novo.nome.equals(inicio.nome)) {
+                            inicio = inicio.proximo;
+                            if (inicio == null) {
+
+                                termino = null;
+
+                            }
+                            System.out.println("Música removida com sucesso!");
+                            achado = true;
+                        } else if (novo.nome.equals(termino.nome)) {
+                            while (true) {
+                                if (atual.proximo.nome.equals(termino.nome)) {
+                                    atual.proximo = null;
+                                    break;
+                                }
+
+                            }
+                            termino = null;
+                        } else {
+                            while (atual != null) {
+                                if (atual.nome.equals(novo.nome)) {
+                                    Musica anterior = procAnterior(atual.nome);
+                                    anterior.proximo = atual.proximo;
+                                    System.out.println("Música removida com sucesso!");
+                                    break;
+                                }
+                                atual = atual.proximo;
+                            }
+                        }
+                    }
+                    break;
+
+                case 5:
+                    if (inicio == null) {
+                        System.out.println("A lista está vazia!");
+                    } else {
                         inicio = inicio.proximo;
                         if (inicio == null) {
                             termino = null;
                         }
-                    } else {
-                        while (true) {
-                            if (atual.proximo.nome.equals(novo.nome)) {
-
-                            }
-                        }
                     }
-
-                    break;
-
-                case 5:
 
                     break;
 
@@ -105,6 +140,19 @@ public class ListaMusicas {
 
     }
 
+    public static Musica procAnterior(String nome){
+        Musica ret = null;
+        Musica atual = inicio;
+        while(atual != null){
+            if(atual.proximo.nome.equals(nome)){
+                ret = atual;
+                break;
+            }
+        }
+        
+        return ret;
+    }
+    
     public static int pedeOpcao() {
         boolean erro;
         Scanner leia;
